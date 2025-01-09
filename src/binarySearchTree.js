@@ -10,7 +10,8 @@ class Node {
 
 export class Tree {
 	constructor(array) {
-		this.root = this.buildTree(array);
+		this.array = this.createUniqueArray(array);
+		this.root = this.buildTree(this.array);
 	}
 
 	createUniqueArray(array) {
@@ -27,13 +28,12 @@ export class Tree {
 			return null;
 		}
 
-		const sortedArray = this.createUniqueArray(array);
-		const mid = Math.floor(sortedArray.length / 2);
+		const mid = Math.floor(array.length / 2);
 
-		const root = new Node(sortedArray[mid]);
+		const root = new Node(array[mid]);
 
-		root.left = this.buildTree(sortedArray.slice(0, mid));
-		root.right = this.buildTree(sortedArray.slice(mid + 1));
+		root.left = this.buildTree(array.slice(0, mid));
+		root.right = this.buildTree(array.slice(mid + 1));
 
 		return root;
 	}
