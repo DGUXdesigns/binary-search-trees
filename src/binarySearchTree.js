@@ -109,6 +109,31 @@ export class Tree {
 
 		return findRecursive(this.root, value);
 	}
+
+	// Level order iterative approach
+	levelOrderIterative(node) {
+		let queue = [];
+		let visitedNodes = [];
+
+		queue.push(node);
+
+		while (queue.length >= 1) {
+			const currentNode = queue[0];
+			visitedNodes.push(currentNode.data);
+
+			if (currentNode.left !== null) {
+				queue.push(currentNode.left);
+			}
+
+			if (currentNode.right !== null) {
+				queue.push(currentNode.right);
+			}
+
+			queue.shift();
+		}
+
+		return visitedNodes;
+	}
 }
 
 export const prettyPrint = (node, prefix = '', isLeft = true) => {
