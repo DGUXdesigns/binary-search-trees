@@ -38,7 +38,6 @@ export class Tree {
 		return root;
 	}
 
-	// TODO: complete functions to delete and insert a given value
 	insert(value) {
 		const insertRecursive = (node, value) => {
 			if (node === null) {
@@ -62,7 +61,47 @@ export class Tree {
 		this.root = insertRecursive(this.root, value);
 	}
 
-	deleteItem(value, root) {}
+	deleteItem(value) {
+		const deleteRecursive = (node, value) => {
+			// Base case
+			if (node === null) {
+				return node;
+			}
+
+			if (node.data > value) {
+				node.left = deleteRecursive(node.left, value);
+			} else if (node.data < value) {
+				node.right = deleteRecursive(node.right, value);
+			} else {
+				// Node with 0 or 1 child
+				if (node.left === null) {
+					return node.right;
+				}
+
+				if (node.right === null) {
+					return node.left;
+				}
+
+				// Node with 2 children
+				let findMin = (currentNode) => {
+					while (currentNode.left !== null) {
+						currentNode = currentNode.left;
+					}
+
+					return currentNode;
+				};
+
+				const successor = findMin(node.right);
+
+				node.data = successor.data;
+				node.right = deleteRecursive(node.right, successor.data);
+			}
+
+			return node;
+		};
+
+		this.root = deleteRecursive(this.root, value);
+	}
 }
 
 export const prettyPrint = (node, prefix = '', isLeft = true) => {
