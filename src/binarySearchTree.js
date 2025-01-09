@@ -62,37 +62,30 @@ export class Tree {
 	}
 
 	deleteItem(value) {
+		// Find smallest node
+		const findMin = (node) => {
+			while (node.left !== null) {
+				node = node.left;
+			}
+			return node;
+		};
+
 		const deleteRecursive = (node, value) => {
-			// Base case
 			if (node === null) {
-				return node;
+				return null;
 			}
 
-			if (node.data > value) {
+			if (value < node.data) {
 				node.left = deleteRecursive(node.left, value);
-			} else if (node.data < value) {
+			} else if (value > node.data) {
 				node.right = deleteRecursive(node.right, value);
 			} else {
-				// Node with 0 or 1 child
-				if (node.left === null) {
-					return node.right;
-				}
+				// Case 1: No child or one child
+				if (node.left === null) return node.right;
+				if (node.right === null) return node.left;
 
-				if (node.right === null) {
-					return node.left;
-				}
-
-				// Node with 2 children
-				let findMin = (currentNode) => {
-					while (currentNode.left !== null) {
-						currentNode = currentNode.left;
-					}
-
-					return currentNode;
-				};
-
+				// Case 2: Two children
 				const successor = findMin(node.right);
-
 				node.data = successor.data;
 				node.right = deleteRecursive(node.right, successor.data);
 			}
@@ -101,6 +94,20 @@ export class Tree {
 		};
 
 		this.root = deleteRecursive(this.root, value);
+	}
+
+	find(value) {
+		const findRecursive = (node, value) => {
+			if (!node || node.data === value) {
+				return node;
+			}
+
+			return node.data > value
+				? findRecursive(node.left, value)
+				: findRecursive(node.right, value);
+		};
+
+		return findRecursive(this.root, value);
 	}
 }
 
