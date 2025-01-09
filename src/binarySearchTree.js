@@ -39,26 +39,30 @@ export class Tree {
 	}
 
 	// TODO: complete functions to delete and insert a given value
-	insert(value, root) {
-		if (root === null) {
-			return new Node(value);
-		}
+	insert(value) {
+		const insertRecursive = (node, value) => {
+			if (node === null) {
+				return new Node(value);
+			}
 
-		// Ensure no duplicates
-		if (root.data === value) {
-			return root;
-		}
+			// Ensure no duplicates
+			if (node.data === value) {
+				return node;
+			}
 
-		if (root.data > value) {
-			root.left = this.insert(value, root.left);
-		} else if (root.data < value) {
-			root.right = this.insert(value, root.right);
-		}
+			if (value < node.data) {
+				node.left = insertRecursive(node.left, value);
+			} else {
+				node.right = insertRecursive(node.right, value);
+			}
 
-		return root;
+			return node;
+		};
+
+		this.root = insertRecursive(this.root, value);
 	}
 
-	deleteItem(value) {}
+	deleteItem(value, root) {}
 }
 
 export const prettyPrint = (node, prefix = '', isLeft = true) => {
