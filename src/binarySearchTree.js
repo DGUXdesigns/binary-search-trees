@@ -37,6 +37,28 @@ export class Tree {
 
 		return root;
 	}
+
+	// TODO: complete functions to delete and insert a given value
+	insert(value, root) {
+		if (root === null) {
+			return new Node(value);
+		}
+
+		// Ensure no duplicates
+		if (root.data === value) {
+			return root;
+		}
+
+		if (root.data > value) {
+			root.left = this.insert(value, root.left);
+		} else if (root.data < value) {
+			root.right = this.insert(value, root.right);
+		}
+
+		return root;
+	}
+
+	deleteItem(value) {}
 }
 
 export const prettyPrint = (node, prefix = '', isLeft = true) => {
