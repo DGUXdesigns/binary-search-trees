@@ -251,20 +251,26 @@ export class Tree {
 	isBalanced() {
 		const checkBalance = (node) => {
 			if (node === null) {
-				return true;
+				return 0;
 			}
 
-			const leftHeight = this.height(this.root.left);
-			const rightHeight = this.height(this.root.right);
+			const leftHeight = checkBalance(node.left);
+			const rightHeight = checkBalance(node.right);
+
+			if (!leftHeight || !rightHeight) {
+				return false;
+			}
+
 			const heightDiff = Math.abs(leftHeight - rightHeight);
 
 			if (heightDiff > 1) {
 				return false;
 			}
 
-			return checkBalance(node.left) && checkBalance(node.right);
+			return Math.max(leftHeight, rightHeight) + 1;
 		};
-		return checkBalance(this.root);
+
+		return checkBalance(this.root) !== false;
 	}
 }
 
