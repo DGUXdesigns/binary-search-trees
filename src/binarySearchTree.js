@@ -222,6 +222,31 @@ export class Tree {
 
 		return Math.max(leftHeight, rightHeight) + 1;
 	}
+
+	depth(value) {
+		const foundNode = this.find(value);
+
+		if (!foundNode) {
+			throw new Error('Node not found');
+		}
+
+		let depth = 0;
+		let currentNode = this.root;
+
+		while (currentNode !== null) {
+			if (currentNode.data === foundNode.data) {
+				return depth;
+			}
+
+			if (currentNode.data > foundNode.data) {
+				currentNode = currentNode.left;
+			} else {
+				currentNode = currentNode.right;
+			}
+
+			depth++;
+		}
+	}
 }
 
 export const prettyPrint = (node, prefix = '', isLeft = true) => {
