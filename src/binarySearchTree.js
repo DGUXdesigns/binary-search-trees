@@ -137,17 +137,21 @@ export class Tree {
 			throw new Error('A callback function is required.');
 		}
 
-		const preorderRec = (node) => {
-			if (node === null) {
-				return;
+		const stack = [];
+		stack.push(this.root);
+
+		while (stack.length > 0) {
+			const currentNode = stack.pop(); // Process the node
+			callback(currentNode);
+
+			// Push right child first so left child is processed first
+			if (currentNode.right) {
+				stack.push(currentNode.right);
 			}
-
-			callback(node);
-			preorderRec(node.left);
-			preorderRec(node.right);
-		};
-
-		preorderRec(this.root);
+			if (currentNode.left) {
+				stack.push(currentNode.left);
+			}
+		}
 	}
 
 	inOrder(callback) {
@@ -155,17 +159,23 @@ export class Tree {
 			throw new Error('A callback function is required.');
 		}
 
-		const inOrderRec = (node) => {
-			if (node === null) {
-				return;
+		const stack = [];
+		let currentNode = this.root;
+
+		while (stack.length > 0 || currentNode !== null) {
+			// Traverse to the leftmost node
+			while (currentNode !== null) {
+				stack.push(currentNode);
+				currentNode = currentNode.left;
 			}
 
-			inOrderRec(node.left);
-			callback(node);
-			inOrderRec(node.right);
-		};
+			// Process the node
+			currentNode = stack.pop();
+			callback(currentNode);
 
-		inOrderRec(this.root);
+			// Process the right subtree
+			currentNode = currentNode.right;
+		}
 	}
 
 	postOrder(callback) {
@@ -173,17 +183,33 @@ export class Tree {
 			throw new Error('A callback function is required.');
 		}
 
-		const postOrderRec = (node) => {
-			if (node === null) {
-				return;
+		const stack1 = [];
+		const stack2 = [];
+		let currentNode = this.root;
+
+		if (currentNode !== null) {
+			stack1.push(currentNode);
+
+			while (stack1.length > 0) {
+				currentNode = stack1.pop();
+				stack2.push(currentNode);
+
+				// Push left and right children to stack1
+				if (currentNode.left !== null) {
+					stack1.push(currentNode.left);
+				}
+
+				if (currentNode.right !== null) {
+					stack1.push(currentNode.right);
+				}
 			}
+		}
 
-			postOrderRec(node.left);
-			postOrderRec(node.right);
-			callback(node);
-		};
-
-		postOrderRec(this.root);
+		// Process nodes from stack2 (post-order: left, right, node)
+		while (stack2.length > 0) {
+			currentNode = stack2.pop();
+			callback(currentNode);
+		}
 	}
 }
 
