@@ -110,29 +110,68 @@ export class Tree {
 		return findRecursive(this.root, value);
 	}
 
-	// Level order iterative approach
-	levelOrderIterative(node) {
+	levelOrder(callback) {
+		if (typeof callback !== 'function') {
+			throw new Error('A callback function is required.');
+		}
+
 		let queue = [];
-		let visitedNodes = [];
+		queue.push(this.root);
 
-		queue.push(node);
+		while (queue.length > 0) {
+			const currentNode = queue.shift();
+			callback(currentNode);
 
-		while (queue.length >= 1) {
-			const currentNode = queue[0];
-			visitedNodes.push(currentNode.data);
-
-			if (currentNode.left !== null) {
+			if (currentNode.left) {
 				queue.push(currentNode.left);
 			}
 
-			if (currentNode.right !== null) {
+			if (currentNode.right) {
 				queue.push(currentNode.right);
 			}
+		}
+	}
 
-			queue.shift();
+	preOrder(callback) {
+		if (typeof callback !== 'function') {
+			throw new Error('A callback function is required.');
 		}
 
-		return visitedNodes;
+		const preorderRec = (node) => {
+			if (node === null) {
+				return;
+			}
+
+			callback(node);
+			preorderRec(node.left);
+			preorderRec(node.right);
+		};
+
+		preorderRec(this.root);
+	}
+
+	inOrder(callback) {
+		if (typeof callback !== 'function') {
+			throw new Error('A callback function is required.');
+		}
+
+		const inOrderRec = (node) => {
+			if (node === null) {
+				return;
+			}
+
+			inOrderRec(node.left);
+			callback(node);
+			inOrderRec(node.right);
+		};
+
+		inOrderRec(this.root);
+	}
+
+	postOrder(callback) {
+		// Visit left subtree
+		// Visit right subtree
+		// Visit data
 	}
 }
 
