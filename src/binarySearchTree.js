@@ -257,7 +257,7 @@ export class Tree {
 			const leftHeight = checkBalance(node.left);
 			const rightHeight = checkBalance(node.right);
 
-			if (!leftHeight || !rightHeight) {
+			if (leftHeight === false || rightHeight === false) {
 				return false;
 			}
 
@@ -271,6 +271,19 @@ export class Tree {
 		};
 
 		return checkBalance(this.root) !== false;
+	}
+
+	rebalance() {
+		let newArray = [];
+
+		if (!this.isBalanced()) {
+			this.inOrder((node) => {
+				newArray.push(node.data);
+			});
+		}
+
+		this.array = this.createUniqueArray(newArray);
+		this.root = this.buildTree(this.array);
 	}
 }
 
