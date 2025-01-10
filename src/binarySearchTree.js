@@ -169,9 +169,21 @@ export class Tree {
 	}
 
 	postOrder(callback) {
-		// Visit left subtree
-		// Visit right subtree
-		// Visit data
+		if (typeof callback !== 'function') {
+			throw new Error('A callback function is required.');
+		}
+
+		const postOrderRec = (node) => {
+			if (node === null) {
+				return;
+			}
+
+			postOrderRec(node.left);
+			postOrderRec(node.right);
+			callback(node);
+		};
+
+		postOrderRec(this.root);
 	}
 }
 
